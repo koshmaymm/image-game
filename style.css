@@ -1,0 +1,21 @@
+body{
+    background-color: yellow;
+    font-family: Georgia, 'Times New Roman', Times, serif;
+}
+img{
+    margin: 4px;
+}
+
+.container {
+    
+    background: rgb(128, 0, 28);
+    border: 2px solid black;
+    max-width: 1000px;
+}
+
+#fieldForGame {
+    position: absolute;
+    
+    
+    
+}
