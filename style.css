@@ -1,21 +1,40 @@
 body{
     background-color: yellow;
     font-family: Georgia, 'Times New Roman', Times, serif;
+    text-align: center;
 }
 img{
     margin: 4px;
+    width: 80px;
+    height: 80px;
 }
 
 .container {
-    
     background: rgb(128, 0, 28);
     border: 2px solid black;
-    max-width: 1000px;
+    width: 800px;
+    min-height: 400px;
+    display: inline-block;
 }
 
 #fieldForGame {
-    position: absolute;
-    
-    
-    
+    margin: auto;  
+}
+#start{
+    margin: 24px;
+}
+
+.rows{
+    margin: 10px;
+    min-width: 80px;
+    min-height: 50px;
+}
+
+.cells{
+    margin: 10px;
+    width: 60px;
+    height: 60px;
+    background: rgb(176, 184, 55);
+    border: 2px solid black;
+    display: inline-block;
 }
