@@ -1,12 +1,13 @@
-body{
+body {
     background-color: yellow;
     font-family: Georgia, 'Times New Roman', Times, serif;
     text-align: center;
 }
-img{
-    margin: 4px;
-    width: 80px;
-    height: 80px;
+
+img {
+    margin: auto;
+    width: 60px;
+    height: 60px;
 }
 
 .container {
@@ -18,23 +19,33 @@ img{
 }
 
 #fieldForGame {
-    margin: auto;  
+    margin: auto;
 }
-#start{
+
+#start {
     margin: 24px;
 }
 
-.rows{
+.rows {
     margin: 10px;
     min-width: 80px;
     min-height: 50px;
 }
 
-.cells{
+.cells {
     margin: 10px;
     width: 60px;
     height: 60px;
-    background: rgb(176, 184, 55);
+    background: rgb(55, 184, 83);
     border: 2px solid black;
     display: inline-block;
+    z-index: 3;
+}
+
+.shadow {
+    background-color: blue;
+}
+
+.shot {
+    display: none;
 }
