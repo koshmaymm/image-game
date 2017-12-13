@@ -50,5 +50,5 @@ img {
 }
 
 .shot {
-    display: none;
+    visibility: hidden;
 }

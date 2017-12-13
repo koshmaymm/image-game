@@ -17,6 +17,7 @@ window.onload = function() {
             width: 0,
             height: 0
         },
+
         imgArr: ["https://kde.link/test/0.png", "https://kde.link/test/0.png",
             "https://kde.link/test/1.png", "https://kde.link/test/1.png",
             "https://kde.link/test/2.png", "https://kde.link/test/2.png",
@@ -58,10 +59,16 @@ window.onload = function() {
             "https://kde.link/test/8.png", "https://kde.link/test/8.png",
             "https://kde.link/test/9.png", "https://kde.link/test/9.png"
         ],
+
         matrix: [],
         stack: [],
         cells: "",
         countOpenPictures: 0,
+        firstOpenImageSRC: null,
+        secondOpenImageSRC: null,
+
+
+
         field: document.getElementById("fieldForGame"),
 
         getNumber: function(max, min) {
@@ -85,8 +92,6 @@ window.onload = function() {
             if ((app.fieldParams.width * app.fieldParams.height) % 2 !== 0) {
                 app.fieldParams.height++;
             }
-
-
         },
         generateField: function(num) {
             //required amount duplicate images
@@ -136,7 +141,7 @@ window.onload = function() {
         },
         setField: function() {
             app.setGrid();
-            console.log(app.matrix);
+            //console.log(app.matrix);
             app.pushCells();
             app.pushImgs();
             app.testFunc();
@@ -182,11 +187,9 @@ window.onload = function() {
         },
 
         pushImgs: function() {
-
             for (let i = 0; i < app.cells.length; i++) {
                 app.cells[i].classList.add("shadow");
             }
-
         },
         testFunc: function() {
             for (let i = 0; i < app.cells.length; i++) {
@@ -195,21 +198,51 @@ window.onload = function() {
 
         },
         checkPicture: function(e) {
-            app.countOpenPictures++;
+            if (app.countOpenPictures === 0) {
+                app.firstOpenImageSRC = app.matrix[e.target.dataset.x][e.target.dataset.y].src;
+            }
+            if (app.countOpenPictures === 1) {
+                app.secondOpenImageSRC = app.matrix[e.target.dataset.x][e.target.dataset.y].src;
+            }
             //console.log(e.target.dataset.x, e.target.dataset.y)
+            if (app.countOpenPictures > 1) {
+                app.hiddenAllImages(e);
+            }
+
+
             if (e.target.classList.contains("shadow")) {
+                app.countOpenPictures++;
+                //console.log(app.countOpenPictures);
+
                 e.target.classList.remove("shadow");
+                e.target.classList.add("choosen");
                 //console.log(app.matrix[e.target.dataset.x][e.target.dataset.y].src);
                 e.target.style.backgroundImage = "url(" + app.matrix[e.target.dataset.x][e.target.dataset.y].src + ")";
             } else {
+                e.target.classList.remove("choosen");
                 e.target.classList.add("shadow");
                 app.countOpenPictures--;
+                //console.log(app.countOpenPictures);
+
                 //console.log(app.matrix[e.target.dataset.x][e.target.dataset.y].src);
                 e.target.style.backgroundImage = "";
             }
+
         },
         getRandomImgURL: function() {
             return app.imgArr[app.getNumber(app.imgArr.length - 1, 0)]
+        },
+        hiddenAllImages: function(e) {
+            let pictures = document.querySelectorAll(".choosen");
+            pictures[0].style.backgroundImage = "";
+            pictures[0].classList.remove("choosen");
+            pictures[0].classList.add("shadow");
+            pictures[1].style.backgroundImage = "";
+            pictures[1].classList.remove("choosen");
+            pictures[1].classList.add("shadow");
+            app.countOpenPictures = 0;
+
+            app.checkPicture(e);
         }
 
     }
