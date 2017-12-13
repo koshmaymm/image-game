@@ -17,10 +17,46 @@ window.onload = function() {
             width: 0,
             height: 0
         },
-        imgArr: ["https://kde.link/test/0.png", "https://kde.link/test/1.png", "https://kde.link/test/2.png",
-            "https://kde.link/test/3.png", "https://kde.link/test/4.png", "https://kde.link/test/5.png",
-            "https://kde.link/test/6.png", "https://kde.link/test/7.png", "https://kde.link/test/8.png",
-            "https://kde.link/test/9.png"
+        imgArr: ["https://kde.link/test/0.png", "https://kde.link/test/0.png",
+            "https://kde.link/test/1.png", "https://kde.link/test/1.png",
+            "https://kde.link/test/2.png", "https://kde.link/test/2.png",
+            "https://kde.link/test/3.png", "https://kde.link/test/3.png",
+            "https://kde.link/test/4.png", "https://kde.link/test/4.png",
+            "https://kde.link/test/5.png", "https://kde.link/test/5.png",
+            "https://kde.link/test/6.png", "https://kde.link/test/6.png",
+            "https://kde.link/test/7.png", "https://kde.link/test/7.png",
+            "https://kde.link/test/8.png", "https://kde.link/test/8.png",
+            "https://kde.link/test/9.png", "https://kde.link/test/9.png",
+            "https://kde.link/test/0.png", "https://kde.link/test/0.png",
+            "https://kde.link/test/1.png", "https://kde.link/test/1.png",
+            "https://kde.link/test/2.png", "https://kde.link/test/2.png",
+            "https://kde.link/test/3.png", "https://kde.link/test/3.png",
+            "https://kde.link/test/4.png", "https://kde.link/test/4.png",
+            "https://kde.link/test/5.png", "https://kde.link/test/5.png",
+            "https://kde.link/test/6.png", "https://kde.link/test/6.png",
+            "https://kde.link/test/7.png", "https://kde.link/test/7.png",
+            "https://kde.link/test/8.png", "https://kde.link/test/8.png",
+            "https://kde.link/test/9.png", "https://kde.link/test/9.png",
+            "https://kde.link/test/0.png", "https://kde.link/test/0.png",
+            "https://kde.link/test/1.png", "https://kde.link/test/1.png",
+            "https://kde.link/test/2.png", "https://kde.link/test/2.png",
+            "https://kde.link/test/3.png", "https://kde.link/test/3.png",
+            "https://kde.link/test/4.png", "https://kde.link/test/4.png",
+            "https://kde.link/test/5.png", "https://kde.link/test/5.png",
+            "https://kde.link/test/6.png", "https://kde.link/test/6.png",
+            "https://kde.link/test/7.png", "https://kde.link/test/7.png",
+            "https://kde.link/test/8.png", "https://kde.link/test/8.png",
+            "https://kde.link/test/9.png", "https://kde.link/test/9.png",
+            "https://kde.link/test/0.png", "https://kde.link/test/0.png",
+            "https://kde.link/test/1.png", "https://kde.link/test/1.png",
+            "https://kde.link/test/2.png", "https://kde.link/test/2.png",
+            "https://kde.link/test/3.png", "https://kde.link/test/3.png",
+            "https://kde.link/test/4.png", "https://kde.link/test/4.png",
+            "https://kde.link/test/5.png", "https://kde.link/test/5.png",
+            "https://kde.link/test/6.png", "https://kde.link/test/6.png",
+            "https://kde.link/test/7.png", "https://kde.link/test/7.png",
+            "https://kde.link/test/8.png", "https://kde.link/test/8.png",
+            "https://kde.link/test/9.png", "https://kde.link/test/9.png"
         ],
         matrix: [],
         stack: [],
@@ -33,31 +69,44 @@ window.onload = function() {
             rand = Math.round(rand);
             return rand;
         },
+        randomArrValue: function(a, b) {
+            return Math.random() - 0.5;
+        },
         setFieldParams: function() {
             app.fieldParams.width = app.getNumber(8, 2);
             app.fieldParams.height = app.getNumber(8, 2);
-            //
+            //get random height and width values
             if (app.fieldParams.width < app.fieldParams.height) {
                 let num = app.fieldParams.width;
                 app.fieldParams.width = app.fieldParams.height;
                 app.fieldParams.height = num;
             }
-            //
+            // if height > width swap them
             if ((app.fieldParams.width * app.fieldParams.height) % 2 !== 0) {
                 app.fieldParams.height++;
             }
 
 
         },
+        generateField: function(num) {
+            //required amount duplicate images
+            app.imgArr = app.imgArr.splice(0, num);
+            //random sort images
+            app.imgArr = app.imgArr.sort(function(a, b) { return 0.5 - Math.random() });
+            console.log(app.imgArr)
+        },
+
         generateBoard: function() {
             let full = false;
             let total = app.fieldParams.width * app.fieldParams.height;
 
+            app.generateField(total);
+
             while (!full) {
                 let imgURL = app.getRandomImgURL();
                 let countImageURL = app.countSameImages(imgURL);
-
-                console.log(imgURL, countImageURL)
+                // console.log(app.imgArr.length)
+                //console.log(imgURL, countImageURL)
 
                 app.stack.push(imgURL);
                 if (app.stack.length >= (total)) {
@@ -81,7 +130,7 @@ window.onload = function() {
         },
         setField: function() {
             app.setGrid();
-            console.log(app.matrix);
+            //console.log(app.matrix);
             app.pushCells();
             app.pushImgs();
             app.testFunc();
@@ -127,7 +176,7 @@ window.onload = function() {
         },
 
         pushImgs: function() {
-            //console.log(app.cells);
+
             for (let i = 0; i < app.cells.length; i++) {
                 app.cells[i].classList.add("shadow");
             }
