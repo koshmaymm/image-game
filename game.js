@@ -13,6 +13,13 @@ window.onload = function() {
 
     let app = {
 
+        CLASSES: {
+            CELLS: '.cells',
+            SHADOW: '.shadow',
+            CHOSEN: '.chosen',
+            DELETED: '.deleted'
+        },
+
         fieldParams: {
             width: 0,
             height: 0
@@ -27,38 +34,9 @@ window.onload = function() {
             "https://kde.link/test/6.png", "https://kde.link/test/6.png",
             "https://kde.link/test/7.png", "https://kde.link/test/7.png",
             "https://kde.link/test/8.png", "https://kde.link/test/8.png",
-            "https://kde.link/test/9.png", "https://kde.link/test/9.png",
-            "https://kde.link/test/0.png", "https://kde.link/test/0.png",
-            "https://kde.link/test/1.png", "https://kde.link/test/1.png",
-            "https://kde.link/test/2.png", "https://kde.link/test/2.png",
-            "https://kde.link/test/3.png", "https://kde.link/test/3.png",
-            "https://kde.link/test/4.png", "https://kde.link/test/4.png",
-            "https://kde.link/test/5.png", "https://kde.link/test/5.png",
-            "https://kde.link/test/6.png", "https://kde.link/test/6.png",
-            "https://kde.link/test/7.png", "https://kde.link/test/7.png",
-            "https://kde.link/test/8.png", "https://kde.link/test/8.png",
-            "https://kde.link/test/9.png", "https://kde.link/test/9.png",
-            "https://kde.link/test/0.png", "https://kde.link/test/0.png",
-            "https://kde.link/test/1.png", "https://kde.link/test/1.png",
-            "https://kde.link/test/2.png", "https://kde.link/test/2.png",
-            "https://kde.link/test/3.png", "https://kde.link/test/3.png",
-            "https://kde.link/test/4.png", "https://kde.link/test/4.png",
-            "https://kde.link/test/5.png", "https://kde.link/test/5.png",
-            "https://kde.link/test/6.png", "https://kde.link/test/6.png",
-            "https://kde.link/test/7.png", "https://kde.link/test/7.png",
-            "https://kde.link/test/8.png", "https://kde.link/test/8.png",
-            "https://kde.link/test/9.png", "https://kde.link/test/9.png",
-            "https://kde.link/test/0.png", "https://kde.link/test/0.png",
-            "https://kde.link/test/1.png", "https://kde.link/test/1.png",
-            "https://kde.link/test/2.png", "https://kde.link/test/2.png",
-            "https://kde.link/test/3.png", "https://kde.link/test/3.png",
-            "https://kde.link/test/4.png", "https://kde.link/test/4.png",
-            "https://kde.link/test/5.png", "https://kde.link/test/5.png",
-            "https://kde.link/test/6.png", "https://kde.link/test/6.png",
-            "https://kde.link/test/7.png", "https://kde.link/test/7.png",
-            "https://kde.link/test/8.png", "https://kde.link/test/8.png",
             "https://kde.link/test/9.png", "https://kde.link/test/9.png"
         ],
+
 
         matrix: [],
         stack: [],
@@ -79,6 +57,11 @@ window.onload = function() {
         randomArrValue: function(a, b) {
             return Math.random() - 0.5;
         },
+
+        makeMaxBord: function(arr) {
+            app.imgArr = arr.concat(arr).concat(arr).concat(arr);
+        },
+
         setFieldParams: function() {
             app.fieldParams.width = app.getNumber(8, 2);
             app.fieldParams.height = app.getNumber(8, 2);
@@ -113,20 +96,8 @@ window.onload = function() {
                 let imgURL = app.imgArr[i];
                 app.stack.push(imgURL);
             }
-            /*while (!full) {
-                 let imgURL = app.getRandomImgURL();
-                 let countImageURL = app.countSameImages(imgURL);
-                 // console.log(app.imgArr.length)
-                 //console.log(imgURL, countImageURL)
-
-                 app.stack.push(imgURL);
-                 if (app.stack.length >= (total)) {
-                     full = true;
-                 }
-             }*/
-
         },
-        countSameImages: function(url) {
+        /*countSameImages: function(url) {
             let count = 0;
             app.stack.forEach(function(a) {
                 if (url === a) {
@@ -134,7 +105,7 @@ window.onload = function() {
                 }
             })
             return count;
-        },
+        },*/
         startPlay: function() {
             start.addEventListener("click", app.setField, false);
 
@@ -144,7 +115,7 @@ window.onload = function() {
             //console.log(app.matrix);
             app.pushCells();
             app.pushImgs();
-            app.testFunc();
+            app.addEvents();
         },
 
         createImg: function() {
@@ -174,7 +145,7 @@ window.onload = function() {
                     app.matrix[i][j] = {
                         src: app.stack.pop(),
                         isVisible: true,
-                        isChoosen: false,
+                        isChosen: false,
                         isDeleted: false
                     };
                 }
@@ -191,13 +162,18 @@ window.onload = function() {
                 app.cells[i].classList.add("shadow");
             }
         },
-        testFunc: function() {
-            for (let i = 0; i < app.cells.length; i++) {
-                app.cells[i].addEventListener("click", app.checkPicture, false);
-            }
+        addEvents: function() {
+            /*for (let i = 0; i < app.cells.length; i++) {
+                app.cells.addEventListener("click", app.checkPicture, false);
+            }*/
+            app.field.addEventListener("click", app.checkPicture, false);
 
         },
         checkPicture: function(e) {
+            let element = e.target;
+            //console.log(e.target.querySelector(".cell"))
+            if (!element.classList.contains("cells")) { return false }
+
             if (app.countOpenPictures === 0) {
                 app.firstOpenImageSRC = app.matrix[e.target.dataset.x][e.target.dataset.y].src;
             }
@@ -206,47 +182,48 @@ window.onload = function() {
             }
             //console.log(e.target.dataset.x, e.target.dataset.y)
             if (app.countOpenPictures > 1) {
-                app.hiddenAllImages(e);
+                app.hideAllImages(e);
             }
 
 
-            if (e.target.classList.contains("shadow")) {
+            if (element.classList.contains("shadow")) {
                 app.countOpenPictures++;
                 //console.log(app.countOpenPictures);
 
-                e.target.classList.remove("shadow");
-                e.target.classList.add("choosen");
+                element.classList.remove("shadow");
+                element.classList.add("chosen");
                 //console.log(app.matrix[e.target.dataset.x][e.target.dataset.y].src);
-                e.target.style.backgroundImage = "url(" + app.matrix[e.target.dataset.x][e.target.dataset.y].src + ")";
+                element.style.backgroundImage = "url(" + app.matrix[e.target.dataset.x][e.target.dataset.y].src + ")";
             } else {
-                e.target.classList.remove("choosen");
-                e.target.classList.add("shadow");
+                element.classList.remove("chosen");
+                element.classList.add("shadow");
                 app.countOpenPictures--;
                 //console.log(app.countOpenPictures);
 
                 //console.log(app.matrix[e.target.dataset.x][e.target.dataset.y].src);
-                e.target.style.backgroundImage = "";
+                element.style.backgroundImage = "";
             }
 
         },
         getRandomImgURL: function() {
             return app.imgArr[app.getNumber(app.imgArr.length - 1, 0)]
         },
-        hiddenAllImages: function(e) {
-            let pictures = document.querySelectorAll(".choosen");
-            pictures[0].style.backgroundImage = "";
-            pictures[0].classList.remove("choosen");
-            pictures[0].classList.add("shadow");
-            pictures[1].style.backgroundImage = "";
-            pictures[1].classList.remove("choosen");
-            pictures[1].classList.add("shadow");
+        handlehidenElement: function(element) {
+            element.style.backgroundImage = "";
+            element.classList.remove("chosen");
+            element.classList.add("shadow");
+        },
+        hideAllImages: function(e) {
+            let pictures = document.querySelectorAll(".chosen");
+            app.handlehidenElement(pictures[0]);
+            app.handlehidenElement(pictures[1]);
             app.countOpenPictures = 0;
 
             app.checkPicture(e);
         }
 
     }
-
+    app.makeMaxBord(app.imgArr);
     app.setFieldParams();
     app.generateBoard();
     app.startPlay();
