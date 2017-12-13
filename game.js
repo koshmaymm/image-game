@@ -93,6 +93,7 @@ window.onload = function() {
             app.imgArr = app.imgArr.splice(0, num);
             //random sort images
             app.imgArr = app.imgArr.sort(function(a, b) { return 0.5 - Math.random() });
+            app.imgArr = app.imgArr.sort(function(a, b) { return 0.5 - Math.random() });
             console.log(app.imgArr)
         },
 
