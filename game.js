@@ -94,7 +94,7 @@ window.onload = function() {
             //random sort images
             app.imgArr = app.imgArr.sort(function(a, b) { return 0.5 - Math.random() });
             app.imgArr = app.imgArr.sort(function(a, b) { return 0.5 - Math.random() });
-            console.log(app.imgArr)
+
         },
 
         generateBoard: function() {
@@ -103,17 +103,22 @@ window.onload = function() {
 
             app.generateField(total);
 
-            while (!full) {
-                let imgURL = app.getRandomImgURL();
-                let countImageURL = app.countSameImages(imgURL);
-                // console.log(app.imgArr.length)
-                //console.log(imgURL, countImageURL)
 
+            for (let i = 0; i < app.imgArr.length; i++) {
+                let imgURL = app.imgArr[i];
                 app.stack.push(imgURL);
-                if (app.stack.length >= (total)) {
-                    full = true;
-                }
             }
+            /*while (!full) {
+                 let imgURL = app.getRandomImgURL();
+                 let countImageURL = app.countSameImages(imgURL);
+                 // console.log(app.imgArr.length)
+                 //console.log(imgURL, countImageURL)
+
+                 app.stack.push(imgURL);
+                 if (app.stack.length >= (total)) {
+                     full = true;
+                 }
+             }*/
 
         },
         countSameImages: function(url) {
@@ -131,7 +136,7 @@ window.onload = function() {
         },
         setField: function() {
             app.setGrid();
-            //console.log(app.matrix);
+            console.log(app.matrix);
             app.pushCells();
             app.pushImgs();
             app.testFunc();
