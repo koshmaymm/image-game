@@ -196,12 +196,16 @@ window.onload = function() {
         },
         checkPicture: function(e) {
             app.countOpenPictures++;
-            console.log(e.target.dataset.x, e.target.dataset.y)
+            //console.log(e.target.dataset.x, e.target.dataset.y)
             if (e.target.classList.contains("shadow")) {
                 e.target.classList.remove("shadow");
+                //console.log(app.matrix[e.target.dataset.x][e.target.dataset.y].src);
+                e.target.style.backgroundImage = "url(" + app.matrix[e.target.dataset.x][e.target.dataset.y].src + ")";
             } else {
                 e.target.classList.add("shadow");
                 app.countOpenPictures--;
+                //console.log(app.matrix[e.target.dataset.x][e.target.dataset.y].src);
+                e.target.style.backgroundImage = "";
             }
         },
         getRandomImgURL: function() {

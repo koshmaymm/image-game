@@ -36,14 +36,17 @@ img {
     margin: 10px;
     width: 60px;
     height: 60px;
-    background: rgb(55, 184, 83);
+    /*background: rgb(55, 184, 83);*/
     border: 2px solid black;
     display: inline-block;
     z-index: 3;
+    background-position: center;
+    background-size: 100%;
+    background-repeat: no-repeat;
 }
 
 .shadow {
-    background-color: blue;
+    background-color: rgb(39, 14, 11);
 }
 
 .shot {
