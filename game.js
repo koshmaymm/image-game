@@ -25,25 +25,28 @@ window.onload = function() {
             height: 0
         },
 
-        imgArr: ["https://kde.link/test/0.png",
-            "https://kde.link/test/1.png",
-            "https://kde.link/test/2.png",
-            "https://kde.link/test/3.png",
-            "https://kde.link/test/4.png",
-            "https://kde.link/test/5.png",
-            "https://kde.link/test/6.png",
-            "https://kde.link/test/7.png",
-            "https://kde.link/test/8.png",
-            "https://kde.link/test/9.png",
+        imgArr: ["https://kde.link/test/0.png", "https://kde.link/test/0.png",
+            "https://kde.link/test/1.png", "https://kde.link/test/1.png",
+            "https://kde.link/test/2.png", "https://kde.link/test/2.png",
+            "https://kde.link/test/3.png", "https://kde.link/test/3.png",
+            "https://kde.link/test/4.png", "https://kde.link/test/4.png",
+            "https://kde.link/test/5.png", "https://kde.link/test/5.png",
+            "https://kde.link/test/6.png", "https://kde.link/test/6.png",
+            "https://kde.link/test/7.png", "https://kde.link/test/7.png",
+            "https://kde.link/test/8.png", "https://kde.link/test/8.png",
+            "https://kde.link/test/9.png", "https://kde.link/test/9.png",
         ],
 
 
         matrix: [],
         stack: [],
         cells: "",
-        countOpenPictures: 0,
-        firstOpenImageSRC: null,
-        secondOpenImageSRC: null,
+
+        variables: {
+            countOpenPictures: 0,
+            firstOpenImageSRC: null,
+            secondOpenImageSRC: null,
+        },
 
 
 
@@ -54,18 +57,12 @@ window.onload = function() {
             rand = Math.round(rand);
             return rand;
         },
+
         randomArrValue: function(a, b) {
             return Math.random() - 0.5;
         },
 
-        doubleImages: function(arr) {
-            for (let i = 0, l = arr.length; i < l; i++) {
-                arr[l + i] = arr[i];
-            }
-        },
-
         makeMaxBord: function(arr) { // get required number of images
-            app.doubleImages(arr); //get double of each image
             app.imgArr = arr.concat(arr).concat(arr).concat(arr);
         },
 
@@ -167,56 +164,89 @@ window.onload = function() {
         },
 
         checkPicture: function(e) {
+
+
+
             let element = e.target;
-            //console.log(e.target.querySelector(".cell"))
-            if (!element.classList.contains(app.CLASSES.CELLS)) { return false }
+            let elemX = element.dataset.x;
+            let elemY = element.dataset.y;
+            let propsClass = element.classList;
 
-            if (app.countOpenPictures === 0) {
-                app.firstOpenImageSRC = app.matrix[e.target.dataset.x][e.target.dataset.y].src;
-            }
-            if (app.countOpenPictures === 1) {
-                app.secondOpenImageSRC = app.matrix[e.target.dataset.x][e.target.dataset.y].src;
-            }
-            //console.log(e.target.dataset.x, e.target.dataset.y)
-            if (app.countOpenPictures > 1) {
+            if (!propsClass.contains(app.CLASSES.CELLS)) { return false }
+
+            if (app.variables.countOpenPictures > 1) {
+                if (app.variables.firstOpenImageSRC === app.variables.secondOpenImageSRC) {
+                    let box = document.querySelectorAll("." + app.CLASSES.CHOSEN);
+                    box[0].classList.add(app.CLASSES.SHOT);
+                    box[1].classList.add(app.CLASSES.SHOT);
+                }
                 app.hideAllImages(e);
+                console.log(app.variables.countOpenPictures);
+
+
             }
 
+            if (propsClass.contains(app.CLASSES.SHADOW)) {
+                if (app.variables.firstOpenImageSRC === null) {
+                    app.variables.firstOpenImageSRC = "url(" + app.matrix[elemX][elemY].src + ")";
+                } else {
+                    app.variables.secondOpenImageSRC = "url(" + app.matrix[elemX][elemY].src + ")";
+                }
+                app.variables.countOpenPictures++;
+                propsClass.remove(app.CLASSES.SHADOW);
+                propsClass.add(app.CLASSES.CHOSEN);
+                //console.log(app.matrix[elemX][elemY].src);
+                element.style.backgroundImage = "url(" + app.matrix[elemX][elemY].src + ")";
 
-            if (element.classList.contains(app.CLASSES.SHADOW)) {
-                app.countOpenPictures++;
-                //console.log(app.countOpenPictures);
+            } else
 
-                element.classList.remove(app.CLASSES.SHADOW);
-                element.classList.add(app.CLASSES.CHOSEN);
-                //console.log(app.matrix[e.target.dataset.x][e.target.dataset.y].src);
-                element.style.backgroundImage = "url(" + app.matrix[e.target.dataset.x][e.target.dataset.y].src + ")";
-            } else {
-                element.classList.remove(app.CLASSES.CHOSEN);
-                element.classList.add(app.CLASSES.SHADOW);
-                app.countOpenPictures--;
-                //console.log(app.countOpenPictures);
-
-                //console.log(app.matrix[e.target.dataset.x][e.target.dataset.y].src);
+            if (propsClass.contains(app.CLASSES.CHOSEN)) {
+                propsClass.remove(app.CLASSES.CHOSEN);
+                propsClass.add(app.CLASSES.SHADOW);
+                app.variables.countOpenPictures--;
                 element.style.backgroundImage = "";
             }
 
+
+
+
+
+
+            /*
+            if (app.variables.countOpenPictures === 0) {
+                app.variables.firstOpenImageSRC = app.matrix[elemX][elemY].src;
+            }
+            if (app.variables.countOpenPictures === 1) {
+                app.variables.secondOpenImageSRC = app.matrix[elemX][elemY].src;
+            }
+            //console.log(elemX, elemY)
+
+*/
+            console.log(app.variables.firstOpenImageSRC);
+            console.log(app.variables.secondOpenImageSRC);
+
+            // console.log(app.variables.countOpenPictures)
         },
+
         getRandomImgURL: function() {
             return app.imgArr[app.getNumber(app.imgArr.length - 1, 0)]
         },
+
         handlehidenElement: function(element) {
             element.style.backgroundImage = "";
             element.classList.remove(app.CLASSES.CHOSEN);
             element.classList.add(app.CLASSES.SHADOW);
         },
-        hideAllImages: function(e) {
-            let pictures = document.querySelectorAll("." + app.CLASSES.CHOSEN);
-            app.handlehidenElement(pictures[0]);
-            app.handlehidenElement(pictures[1]);
-            app.countOpenPictures = 0;
 
-            app.checkPicture(e);
+        hideAllImages: function(e) {
+            let images = document.querySelectorAll("." + app.CLASSES.CHOSEN);
+            app.handlehidenElement(images[0]);
+            app.variables.firstOpenImageSRC = null;
+            app.handlehidenElement(images[1]);
+            app.variables.secondOpenImageSRC = null;
+            app.variables.countOpenPictures = 0;
+
+            //app.checkPicture(e);
         }
 
     }
