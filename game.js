@@ -25,7 +25,7 @@ window.onload = function() {
             height: 0
         },
 
-        imgArr: ["https://kde.link/test/0.png", "https://kde.link/test/0.png",
+        /*imgArr: ["https://kde.link/test/0.png", "https://kde.link/test/0.png",
             "https://kde.link/test/1.png", "https://kde.link/test/1.png",
             "https://kde.link/test/2.png", "https://kde.link/test/2.png",
             "https://kde.link/test/3.png", "https://kde.link/test/3.png",
@@ -35,6 +35,18 @@ window.onload = function() {
             "https://kde.link/test/7.png", "https://kde.link/test/7.png",
             "https://kde.link/test/8.png", "https://kde.link/test/8.png",
             "https://kde.link/test/9.png", "https://kde.link/test/9.png"
+        ],*/
+
+        imgArr: ["https://kde.link/test/0.png",
+            "https://kde.link/test/1.png",
+            "https://kde.link/test/2.png",
+            "https://kde.link/test/3.png",
+            "https://kde.link/test/4.png",
+            "https://kde.link/test/5.png",
+            "https://kde.link/test/6.png",
+            "https://kde.link/test/7.png",
+            "https://kde.link/test/8.png",
+            "https://kde.link/test/9.png",
         ],
 
 
@@ -58,7 +70,14 @@ window.onload = function() {
             return Math.random() - 0.5;
         },
 
-        makeMaxBord: function(arr) {
+        doubleImages: function(arr) {
+            for (let i = 0, l = arr.length; i < l; i++) {
+                arr[l + i] = arr[i];
+            }
+        },
+
+        makeMaxBord: function(arr) { // get required number of images
+            app.doubleImages(arr); //get double of each image
             app.imgArr = arr.concat(arr).concat(arr).concat(arr);
         },
 
@@ -91,25 +110,17 @@ window.onload = function() {
 
             app.generateField(total);
 
-
             for (let i = 0; i < app.imgArr.length; i++) {
                 let imgURL = app.imgArr[i];
                 app.stack.push(imgURL);
             }
         },
-        /*countSameImages: function(url) {
-            let count = 0;
-            app.stack.forEach(function(a) {
-                if (url === a) {
-                    count++;
-                }
-            })
-            return count;
-        },*/
+
         startPlay: function() {
             start.addEventListener("click", app.setField, false);
 
         },
+
         setField: function() {
             app.setGrid();
             //console.log(app.matrix);
