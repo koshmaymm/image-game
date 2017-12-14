@@ -11,31 +11,19 @@ x.send(null);
 
 window.onload = function() {
 
-    let app = {
+    let app = { //app.CLASSES.CHOSEN
 
         CLASSES: {
-            CELLS: '.cells',
-            SHADOW: '.shadow',
-            CHOSEN: '.chosen',
-            DELETED: '.deleted'
+            CELLS: 'cells',
+            SHADOW: 'shadow',
+            CHOSEN: 'chosen',
+            SHOT: 'shot'
         },
 
         fieldParams: {
             width: 0,
             height: 0
         },
-
-        /*imgArr: ["https://kde.link/test/0.png", "https://kde.link/test/0.png",
-            "https://kde.link/test/1.png", "https://kde.link/test/1.png",
-            "https://kde.link/test/2.png", "https://kde.link/test/2.png",
-            "https://kde.link/test/3.png", "https://kde.link/test/3.png",
-            "https://kde.link/test/4.png", "https://kde.link/test/4.png",
-            "https://kde.link/test/5.png", "https://kde.link/test/5.png",
-            "https://kde.link/test/6.png", "https://kde.link/test/6.png",
-            "https://kde.link/test/7.png", "https://kde.link/test/7.png",
-            "https://kde.link/test/8.png", "https://kde.link/test/8.png",
-            "https://kde.link/test/9.png", "https://kde.link/test/9.png"
-        ],*/
 
         imgArr: ["https://kde.link/test/0.png",
             "https://kde.link/test/1.png",
@@ -139,7 +127,7 @@ window.onload = function() {
         },
         createCell: function(x, y) {
             let cell = document.createElement("div");
-            cell.classList.add("cells");
+            cell.classList.add(app.CLASSES.CELLS);
             cell.dataset.x = x;
             cell.dataset.y = y;
             return cell;
@@ -165,25 +153,23 @@ window.onload = function() {
         },
 
         pushCells: function() {
-            app.cells = document.querySelectorAll(".cells");
+            app.cells = document.querySelectorAll("." + app.CLASSES.CELLS);
         },
 
         pushImgs: function() {
             for (let i = 0; i < app.cells.length; i++) {
-                app.cells[i].classList.add("shadow");
+                app.cells[i].classList.add(app.CLASSES.SHADOW);
             }
         },
-        addEvents: function() {
-            /*for (let i = 0; i < app.cells.length; i++) {
-                app.cells.addEventListener("click", app.checkPicture, false);
-            }*/
-            app.field.addEventListener("click", app.checkPicture, false);
 
+        addEvents: function() {
+            app.field.addEventListener("click", app.checkPicture, false);
         },
+
         checkPicture: function(e) {
             let element = e.target;
             //console.log(e.target.querySelector(".cell"))
-            if (!element.classList.contains("cells")) { return false }
+            if (!element.classList.contains(app.CLASSES.CELLS)) { return false }
 
             if (app.countOpenPictures === 0) {
                 app.firstOpenImageSRC = app.matrix[e.target.dataset.x][e.target.dataset.y].src;
@@ -197,17 +183,17 @@ window.onload = function() {
             }
 
 
-            if (element.classList.contains("shadow")) {
+            if (element.classList.contains(app.CLASSES.SHADOW)) {
                 app.countOpenPictures++;
                 //console.log(app.countOpenPictures);
 
-                element.classList.remove("shadow");
-                element.classList.add("chosen");
+                element.classList.remove(app.CLASSES.SHADOW);
+                element.classList.add(app.CLASSES.CHOSEN);
                 //console.log(app.matrix[e.target.dataset.x][e.target.dataset.y].src);
                 element.style.backgroundImage = "url(" + app.matrix[e.target.dataset.x][e.target.dataset.y].src + ")";
             } else {
-                element.classList.remove("chosen");
-                element.classList.add("shadow");
+                element.classList.remove(app.CLASSES.CHOSEN);
+                element.classList.add(app.CLASSES.SHADOW);
                 app.countOpenPictures--;
                 //console.log(app.countOpenPictures);
 
@@ -221,11 +207,11 @@ window.onload = function() {
         },
         handlehidenElement: function(element) {
             element.style.backgroundImage = "";
-            element.classList.remove("chosen");
-            element.classList.add("shadow");
+            element.classList.remove(app.CLASSES.CHOSEN);
+            element.classList.add(app.CLASSES.SHADOW);
         },
         hideAllImages: function(e) {
-            let pictures = document.querySelectorAll(".chosen");
+            let pictures = document.querySelectorAll("." + app.CLASSES.CHOSEN);
             app.handlehidenElement(pictures[0]);
             app.handlehidenElement(pictures[1]);
             app.countOpenPictures = 0;
