@@ -1,4 +1,3 @@
-window.onload = function(){
+window.onload = function () {
     app.init();
 }
-
