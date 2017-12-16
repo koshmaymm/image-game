@@ -177,35 +177,64 @@ window.onload = function() {
 
         checkPicture: function(e) {
 
-            app.verifyBox(e);
+            //app.verifyBox(e);
 
             let element = e.target;
             let elemX = element.dataset.x;
             let elemY = element.dataset.y;
             let propsClass = element.classList;
+            let img1 = app.variables.firstOpenImage;
+            let img2 = app.variables.secondOpenImage;
 
             if (!propsClass.contains(app.CLASSES.CELLS)) { return false }
 
-            if (app.variables.countOpenPictures > 1) {
-                app.hideAllImages(e);
-                console.log(app.variables.countOpenPictures);
+            if (!img1) {
+                img1 = element;
+            } else
+            if ((img1) && (element.dataset.x === img1.dataset.x)) {
+                console.log("HI");
+            } else
+            if ((img1) && (!img2)) {
+                img2 = element;
+            } else
+            if ((img2) && (element.dataset.x === img2.dataset.x)) {
+                console.log("HI");
+            } //else
+            //if (((img1) && (img2)) && (((element.dataset.x !== img1.dataset.x) || (element.dataset.y !== img1.dataset.y)) ((element.dataset.x !== img1.dataset.x) || (element.dataset.y !== img1.dataset.y)) )) {
+            //    console.log("HI-HI");
+            //}
+
+            /*if ((app.variables.firstOpenImage) && (e.target.dataset.x === app.variables.firstOpenImage.dataset.x)) {
+                //console.log("HI");
             }
 
-            if (propsClass.contains(app.CLASSES.SHADOW)) {
-                if (app.variables.firstOpenImageSRC === null) {
-                    app.variables.firstOpenImageSRC = "url(" + app.matrix[elemX][elemY].src + ")";
-                    app.variables.firstOpenImage = element;
-                } else {
-                    app.variables.secondOpenImageSRC = "url(" + app.matrix[elemX][elemY].src + ")";
-                    app.variables.secondOpenImage = element;
-                }
-                app.variables.countOpenPictures++;
-                propsClass.remove(app.CLASSES.SHADOW);
-                propsClass.add(app.CLASSES.CHOSEN);
-                //console.log(app.matrix[elemX][elemY].src);
-                element.style.backgroundImage = "url(" + app.matrix[elemX][elemY].src + ")";
+            if ((app.variables.firstOpenImage) && (!app.variables.secondOpenImage)) {
+                app.variables.secondOpenImage = e.target;
 
-            }
+            } else
+            if (!app.variables.secondOpenImage) {
+                app.variables.secondOpenImage = e.target;
+            }*/
+            /* if (app.variables.countOpenPictures > 1) {
+                 app.hideAllImages(e);
+                 console.log(app.variables.countOpenPictures);
+             }
+
+             if (propsClass.contains(app.CLASSES.SHADOW)) {
+                 if (app.variables.firstOpenImageSRC === null) {
+                     app.variables.firstOpenImageSRC = "url(" + app.matrix[elemX][elemY].src + ")";
+                     app.variables.firstOpenImage = element;
+                 } else {
+                     app.variables.secondOpenImageSRC = "url(" + app.matrix[elemX][elemY].src + ")";
+                     app.variables.secondOpenImage = element;
+                 }
+                 app.variables.countOpenPictures++;
+                 propsClass.remove(app.CLASSES.SHADOW);
+                 propsClass.add(app.CLASSES.CHOSEN);
+                 //console.log(app.matrix[elemX][elemY].src);
+                 element.style.backgroundImage = "url(" + app.matrix[elemX][elemY].src + ")";
+
+             }*/
             /*else
 
                        if (propsClass.contains(app.CLASSES.CHOSEN)) {
@@ -215,7 +244,7 @@ window.onload = function() {
                            element.style.backgroundImage = "";
                        }*/
             app.showAllParams();
-            app.tryShot();
+            // app.tryShot();
             // console.log(app.variables.countOpenPictures)
         },
 
