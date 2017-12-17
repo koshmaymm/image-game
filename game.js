@@ -42,9 +42,6 @@ window.onload = function() {
         cells: "",
 
         variables: {
-            countOpenPictures: 0,
-            firstOpenImageSRC: null,
-            secondOpenImageSRC: null,
             firstOpenImage: null,
             secondOpenImage: null
         },
@@ -61,16 +58,15 @@ window.onload = function() {
             return Math.random() - 0.5;
         },
 
+
         makeMaxBord: function(arr) { // get required number of images
             app.imgArr = arr.concat(arr).concat(arr).concat(arr);
         },
 
         setFieldParams: function() {
-            /*app.fieldParams.width = app.getNumber(8, 2);
-            app.fieldParams.height = app.getNumber(8, 2);*/
-            app.fieldParams.width = app.getNumber(4, 2); // only for testing
-            app.fieldParams.height = app.getNumber(3, 2)
-                //get random height and width values
+            app.fieldParams.width = app.getNumber(8, 2);
+            app.fieldParams.height = app.getNumber(8, 2);
+            //get random height and width values
             if (app.fieldParams.width < app.fieldParams.height) {
                 let num = app.fieldParams.width;
                 app.fieldParams.width = app.fieldParams.height;
@@ -167,8 +163,8 @@ window.onload = function() {
         tryShot: function() {
             let p1 = app.variables.firstOpenImage,
                 p2 = app.variables.secondOpenImage;
-            //dataset.x,
-            if (app.variables.firstOpenImageSRC === app.variables.secondOpenImageSRC) {
+
+            if ((p1 !== null) && (p2 !== null) && (p1.style.backgroundImage == p2.style.backgroundImage)) {
                 let box = document.querySelectorAll("." + app.CLASSES.CHOSEN);
                 box[0].classList.add(app.CLASSES.SHOT);
                 box[1].classList.add(app.CLASSES.SHOT);
@@ -176,8 +172,6 @@ window.onload = function() {
         },
 
         checkPicture: function(e) {
-
-            //app.verifyBox(e);
 
             let element = e.target;
             let elemX = element.dataset.x;
@@ -189,111 +183,62 @@ window.onload = function() {
             if (!propsClass.contains(app.CLASSES.CELLS)) { return false }
 
             if (!img1) {
-                img1 = element;
+                app.variables.firstOpenImage = element;
+                app.showImage(e);
+                app.tryShot();
             } else
-            if ((img1) && (element.dataset.x === img1.dataset.x)) {
-                console.log("HI");
+            if ((img1) && ((element.dataset.x === img1.dataset.x) && (element.dataset.y === img1.dataset.y))) {
+                app.verifyBox(e);
             } else
             if ((img1) && (!img2)) {
+                app.variables.secondOpenImage = element;
+                app.showImage(e);
+                app.tryShot();
+            } else
+            if ((img2) && ((element.dataset.x === img2.dataset.x) && (element.dataset.y === img2.dataset.y))) {
+                app.verifyBox(e);
+            } else if ((img1) && (!img2)) {
                 img2 = element;
-            } else
-            if ((img2) && (element.dataset.x === img2.dataset.x)) {
-                console.log("HI");
-            } //else
-            //if (((img1) && (img2)) && (((element.dataset.x !== img1.dataset.x) || (element.dataset.y !== img1.dataset.y)) ((element.dataset.x !== img1.dataset.x) || (element.dataset.y !== img1.dataset.y)) )) {
-            //    console.log("HI-HI");
-            //}
-
-            /*if ((app.variables.firstOpenImage) && (e.target.dataset.x === app.variables.firstOpenImage.dataset.x)) {
-                //console.log("HI");
+            } else if ((img1) && (img2)) {
+                app.hideAllImages();
+                app.checkPicture(e);
             }
-
-            if ((app.variables.firstOpenImage) && (!app.variables.secondOpenImage)) {
-                app.variables.secondOpenImage = e.target;
-
-            } else
-            if (!app.variables.secondOpenImage) {
-                app.variables.secondOpenImage = e.target;
-            }*/
-            /* if (app.variables.countOpenPictures > 1) {
-                 app.hideAllImages(e);
-                 console.log(app.variables.countOpenPictures);
-             }
-
-             if (propsClass.contains(app.CLASSES.SHADOW)) {
-                 if (app.variables.firstOpenImageSRC === null) {
-                     app.variables.firstOpenImageSRC = "url(" + app.matrix[elemX][elemY].src + ")";
-                     app.variables.firstOpenImage = element;
-                 } else {
-                     app.variables.secondOpenImageSRC = "url(" + app.matrix[elemX][elemY].src + ")";
-                     app.variables.secondOpenImage = element;
-                 }
-                 app.variables.countOpenPictures++;
-                 propsClass.remove(app.CLASSES.SHADOW);
-                 propsClass.add(app.CLASSES.CHOSEN);
-                 //console.log(app.matrix[elemX][elemY].src);
-                 element.style.backgroundImage = "url(" + app.matrix[elemX][elemY].src + ")";
-
-             }*/
-            /*else
-
-                       if (propsClass.contains(app.CLASSES.CHOSEN)) {
-                           propsClass.remove(app.CLASSES.CHOSEN);
-                           propsClass.add(app.CLASSES.SHADOW);
-                           app.variables.countOpenPictures--;
-                           element.style.backgroundImage = "";
-                       }*/
-            app.showAllParams();
-            // app.tryShot();
-            // console.log(app.variables.countOpenPictures)
         },
 
         verifyBox: function(e) {
-            // console.log(app.variables.firstOpenImage);
-            // console.log(app.variables.secondOpenImage);
-            if ((app.variables.firstOpenImage) && (app.variables.firstOpenImage.dataset.x === e.target.dataset.x) && (app.variables.firstOpenImage.dataset.y === e.target.dataset.y)) {
-                app.variables.firstOpenImage = "";
-                app.variables.countOpenPictures--;
-                return false;
-                //app.handlehidenElement(e);
+            if ((app.variables.firstOpenImage.dataset.x === e.target.dataset.x) && (app.variables.firstOpenImage.dataset.y === e.target.dataset.y)) {
+                app.variables.firstOpenImage = null;
+                app.handlehidenElement(e.target);
             } else if ((app.variables.secondOpenImage) && (app.variables.secondOpenImage.dataset.x === e.target.dataset.x) && (app.variables.secondOpenImage.dataset.y === e.target.dataset.y)) {
-                app.variables.secondOpenImage = "";
-                app.variables.countOpenPictures--;
-                return false;
+                app.variables.secondOpenImage = null;
+                app.handlehidenElement(e.target);
             }
         },
+        showImage: function(e) {
+            e.target.classList.remove(app.CLASSES.SHADOW);
+            e.target.classList.add(app.CLASSES.CHOSEN);
+            e.target.style.backgroundImage = "url(" + app.matrix[e.target.dataset.x][e.target.dataset.y].src + ")";
+        },
+
 
         getRandomImgURL: function() {
             return app.imgArr[app.getNumber(app.imgArr.length - 1, 0)]
         },
 
-        handlehidenElement: function(element) {
-            element.classList.remove(app.CLASSES.CHOSEN);
-            element.classList.add(app.CLASSES.SHADOW);
-            element.style.backgroundImage = "";
+        handlehidenElement: function(e) {
+            e.classList.remove(app.CLASSES.CHOSEN);
+            e.classList.add(app.CLASSES.SHADOW);
+            e.style.backgroundImage = null;
         },
 
         hideAllImages: function(e) {
             let images = document.querySelectorAll("." + app.CLASSES.CHOSEN);
-            app.handlehidenElement(images[0]);
-            app.variables.firstOpenImageSRC = null;
-            app.variables.firstOpenImage = null;
-            app.handlehidenElement(images[1]);
-            app.variables.secondOpenImageSRC = null;
-            app.variables.secondOpenImage = null;
-            app.variables.countOpenPictures = 0;
 
-            //app.checkPicture(e);
+            app.variables.firstOpenImage = null;
+            app.variables.secondOpenImage = null;
+            app.handlehidenElement(images[0]);
+            app.handlehidenElement(images[1]);
         },
-        showAllParams() {
-            console.log("-------------------------");
-            console.log("countOpenPictures : " + app.variables.countOpenPictures);
-            console.log("1 url " + app.variables.firstOpenImageSRC);
-            console.log("2 url " + app.variables.secondOpenImageSRC);
-            console.log(app.variables.firstOpenImage);
-            console.log(app.variables.secondOpenImage);
-            console.log("-------------------------");
-        }
 
     }
     app.makeMaxBord(app.imgArr);

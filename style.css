@@ -10,6 +10,11 @@ img {
     height: 60px;
 }
 
+header {
+    background: rgb(51, 216, 78);
+    margin-bottom: 40px;
+}
+
 .container {
     background: rgb(128, 0, 28);
     border: 2px solid black;
