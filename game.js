@@ -162,8 +162,8 @@ let app;
             if ((p1 !== null) && (p2 !== null) && (p1.style.backgroundImage == p2.style.backgroundImage)) {
                 let box = app.variables.field.querySelectorAll("." + app.CLASSES.CHOSEN);
                 box[0].classList.add(app.CLASSES.SHOT);
-                box[1].classList.add(app.CLASSES.SHOT);
                 box[0].classList.remove(app.CLASSES.SHADOW);
+                box[1].classList.add(app.CLASSES.SHOT);
                 box[1].classList.remove(app.CLASSES.SHADOW);
                 app.scoreCount();
                 app.showResult();
@@ -262,7 +262,7 @@ let app;
             let balance = app.variables.field.querySelectorAll("." + app.CLASSES.SHOT);
             if (balance.length >= (app.fieldParams.width * app.fieldParams.height)) {
                 clearInterval(app.variables.countTime)
-                app.variables.field.innerHTML = "<p> You total result is </p> " + app.variables.totalScore + "<p>Points</p>";
+                app.variables.field.innerHTML = "<p> You total result is </p>" + app.variables.totalScore + "<p>Points</p>";
                 app.clearImgParams();
                 this.init();
             }
