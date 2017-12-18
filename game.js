@@ -29,6 +29,7 @@ let app;
 
         variables: {
             field: document.getElementById("fieldForGame"),
+            points: document.getElementById("total"),
             matrix: [],
             stack: [],
             cells: "",
@@ -99,7 +100,7 @@ let app;
 
         setField: function() {
             app.variables.field.innerHTML = "";
-            total.innerHTML = "0";
+            app.variables.points.innerHTML = "0";
             app.setGrid();
             app.pushCells();
             app.pushImgs();
@@ -248,7 +249,7 @@ let app;
 
         scoreCount: function() {
             app.variables.totalScore += Math.floor(app.variables.times / 100);
-            total.innerHTML = app.variables.totalScore;
+            app.variables.points.innerHTML = app.variables.totalScore;
         },
 
         clearImgParams: function() {
