@@ -28,6 +28,9 @@
     
     #fieldForGame {
         margin: auto;
+        color: whitesmoke;
+        font-weight: bold;
+        font-size: 150%;
     }
     
     .rows {
