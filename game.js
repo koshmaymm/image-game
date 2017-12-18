@@ -9,8 +9,6 @@ x.setRequestHeader("Content-Type", "text/html");
 x.send(null);
 */
 
-
-
 let app = {
 
     CLASSES: {
@@ -37,13 +35,12 @@ let app = {
         "https://kde.link/test/9.png", "https://kde.link/test/9.png",
     ],
 
-    newImgArr: [],
-
-    matrix: [],
-    stack: [],
-    cells: "",
-
     variables: {
+        field: document.getElementById("fieldForGame"),
+        matrix: [],
+        stack: [],
+        cells: "",
+        newImgArr: [],
         firstOpenImage: null,
         secondOpenImage: null,
         times: 999,
@@ -51,8 +48,6 @@ let app = {
         totalCells: 0,
         countTime: null
     },
-
-    field: document.getElementById("fieldForGame"),
 
     getNumber: function(max, min) {
         let rand = min - 0.5 + Math.random() * (max - min + 1)
@@ -66,15 +61,13 @@ let app = {
 
 
     makeMaxBord: function() { // get required number of images
-        app.newImgArr = app.imgArr;
-        app.newImgArr = app.newImgArr.concat(app.newImgArr).concat(app.newImgArr).concat(app.newImgArr);
+        app.variables.newImgArr = app.imgArr;
+        app.variables.newImgArr = app.variables.newImgArr.concat(app.variables.newImgArr).concat(app.variables.newImgArr).concat(app.variables.newImgArr);
     },
 
     setFieldParams: function() {
-        //app.fieldParams.width = app.getNumber(8, 2);
-        //app.fieldParams.height = app.getNumber(8, 2);
-        app.fieldParams.width = app.getNumber(4, 2);
-        app.fieldParams.height = app.getNumber(4, 2);
+        app.fieldParams.width = app.getNumber(8, 2);
+        app.fieldParams.height = app.getNumber(8, 2);
         //get random height and width values
         if (app.fieldParams.width < app.fieldParams.height) {
             let num = app.fieldParams.width;
@@ -88,31 +81,32 @@ let app = {
     },
     generateField: function(num) {
         //required amount duplicate images
-        app.newImgArr = app.newImgArr.splice(0, num);
+        app.variables.newImgArr = app.variables.newImgArr.splice(0, num);
         //random sort images
-        app.newImgArr = app.newImgArr.sort(function(a, b) { return 0.5 - Math.random() });
-        app.newImgArr = app.newImgArr.sort(function(a, b) { return 0.5 - Math.random() });
+        app.variables.newImgArr = app.variables.newImgArr.sort(function(a, b) { return 0.5 - Math.random() });
+        app.variables.newImgArr = app.variables.newImgArr.sort(function(a, b) { return 0.5 - Math.random() });
     },
 
     generateBoard: function() {
         let total = app.fieldParams.width * app.fieldParams.height;
         app.generateField(total);
-        for (let i = 0; i < app.newImgArr.length; i++) {
-            let imgURL = app.newImgArr[i];
-            app.stack.push(imgURL);
+        for (let i = 0; i < app.variables.newImgArr.length; i++) {
+            let imgURL = app.variables.newImgArr[i];
+            app.variables.stack.push(imgURL);
         }
     },
 
     startPlay: function() {
         start.addEventListener("click", app.setField, false);
-        total.innerHTML = "";
+
     },
     removeStart: function() {
         start.removeEventListener("click", app.setField, false);
     },
 
     setField: function() {
-        app.field.innerHTML = "";
+        app.variables.field.innerHTML = "";
+        total.innerHTML = "0";
         app.setGrid();
         app.pushCells();
         app.pushImgs();
@@ -139,31 +133,32 @@ let app = {
     setGrid: function() {
         for (let i = 0; i < app.fieldParams.height; i++) {
             let row = app.createRow();
-            app.matrix[i] = [];
+            app.variables.matrix[i] = [];
 
             for (let j = 0; j < app.fieldParams.width; j++) {
                 let cell = app.createCell(i, j);
                 row.appendChild(cell);
-                app.matrix[i][j] = {
-                    src: app.stack.pop()
+                app.variables.matrix[i][j] = {
+                    src: app.variables.stack.pop()
                 };
             }
-            app.field.appendChild(row);
+            app.variables.field.appendChild(row);
         }
     },
 
     pushCells: function() {
-        app.cells = app.field.querySelectorAll("." + app.CLASSES.CELLS);
+        app.variables.cells = app.variables.field.querySelectorAll("." + app.CLASSES.CELLS);
     },
 
     pushImgs: function() {
-        for (let i = 0; i < app.cells.length; i++) {
-            app.cells[i].classList.add(app.CLASSES.SHADOW);
+        for (let i = 0; i < app.variables.cells.length; i++) {
+            app.variables.cells[i].classList.add(app.CLASSES.SHADOW);
         }
     },
 
     addEvents: function() {
-        app.field.addEventListener("click", app.checkPicture, false);
+        app.variables.field.addEventListener("click", app.checkPicture, false);
+        app.variables.countTime = null;
         app.totalCount();
     },
 
@@ -172,7 +167,7 @@ let app = {
             p2 = app.variables.secondOpenImage;
 
         if ((p1 !== null) && (p2 !== null) && (p1.style.backgroundImage == p2.style.backgroundImage)) {
-            let box = app.field.querySelectorAll("." + app.CLASSES.CHOSEN);
+            let box = app.variables.field.querySelectorAll("." + app.CLASSES.CHOSEN);
             box[0].classList.add(app.CLASSES.SHOT);
             box[1].classList.add(app.CLASSES.SHOT);
             box[0].classList.remove(app.CLASSES.SHADOW);
@@ -225,14 +220,15 @@ let app = {
             app.handlehidenElement(e.target);
         }
     },
+
     showImage: function(e) {
         e.target.classList.remove(app.CLASSES.SHADOW);
         e.target.classList.add(app.CLASSES.CHOSEN);
-        e.target.style.backgroundImage = "url(" + app.matrix[e.target.dataset.x][e.target.dataset.y].src + ")";
+        e.target.style.backgroundImage = "url(" + app.variables.matrix[e.target.dataset.x][e.target.dataset.y].src + ")";
     },
 
     getRandomImgURL: function() {
-        return app.newImgArr[app.getNumber(app.newImgArr.length - 1, 0)]
+        return app.variables.newImgArr[app.getNumber(app.variables.newImgArr.length - 1, 0)]
     },
 
     handlehidenElement: function(e) {
@@ -242,7 +238,7 @@ let app = {
     },
 
     hideAllImages: function(e) {
-        let images = app.field.querySelectorAll("." + app.CLASSES.CHOSEN);
+        let images = app.variables.field.querySelectorAll("." + app.CLASSES.CHOSEN);
         app.variables.firstOpenImage = null;
         app.variables.secondOpenImage = null;
         app.handlehidenElement(images[0]);
@@ -264,26 +260,19 @@ let app = {
         total.innerHTML = app.variables.totalScore;
     },
 
-    clearAllParams: function() {
-        app.fieldParams.height = 0;
-        app.fieldParams.width = 0;
-        app.matrix = [];
-        app.stack = [];
-        app.cells = "";
+    clearImgParams: function() {
         app.variables.firstOpenImage = null;
         app.variables.secondOpenImage = null;
         app.variables.times = 999;
         app.variables.totalScore = 0;
-        app.variables.totalCells = 0;
-        app.countTime = null;
     },
 
     showRezult: function() {
-        let balance = app.field.querySelectorAll("." + app.CLASSES.SHOT);
+        let balance = app.variables.field.querySelectorAll("." + app.CLASSES.SHOT);
         if (balance.length >= (app.fieldParams.width * app.fieldParams.height)) {
             clearInterval(app.variables.countTime)
-            app.field.innerHTML = "<p> You total rezult is </p> " + app.variables.totalScore + "<p>Points</p>";
-            app.clearAllParams();
+            app.variables.field.innerHTML = "<p> You total rezult is </p> " + app.variables.totalScore + "<p>Points</p>";
+            app.clearImgParams();
             this.init();
         }
     },
