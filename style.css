@@ -1,60 +1,89 @@
-body {
-    background-color: yellow;
-    font-family: Georgia, 'Times New Roman', Times, serif;
-    text-align: center;
-}
-
-img {
-    margin: auto;
-    width: 60px;
-    height: 60px;
-}
-
-header {
-    background: rgb(49, 194, 71);
-    margin-bottom: 40px;
-    border-bottom: 2px solid black;
-}
-
-.container {
-    background: rgb(128, 0, 28);
-    border: 2px solid black;
-    width: 800px;
-    min-height: 400px;
-    display: inline-block;
-}
-
-#fieldForGame {
-    margin: auto;
-}
-
-#start {
-    margin: 24px;
-}
-
-.rows {
-    margin: 10px;
-    min-width: 80px;
-    min-height: 50px;
-}
-
-.cells {
-    margin: 10px;
-    width: 60px;
-    height: 60px;
-    /*background: rgb(55, 184, 83);*/
-    border: 2px solid black;
-    display: inline-block;
-    z-index: 3;
-    background-position: center;
-    background-size: 100%;
-    background-repeat: no-repeat;
-}
-
-.shadow {
-    background-color: rgb(39, 14, 11);
-}
-
-.shot {
-    visibility: hidden;
-}
+    body {
+        background-color: yellow;
+        font-family: Georgia, 'Times New Roman', Times, serif;
+        text-align: center;
+    }
+    
+    img {
+        margin: auto;
+        width: 60px;
+        height: 60px;
+    }
+    
+    header {
+        background: rgb(49, 194, 71);
+        margin-bottom: 40px;
+        border-bottom: 2px solid black;
+        height: 60px;
+        line-height: 60px;
+    }
+    
+    .container {
+        background: rgb(128, 0, 28);
+        border: 2px solid black;
+        width: 800px;
+        min-height: 400px;
+        display: inline-block;
+    }
+    
+    #fieldForGame {
+        margin: auto;
+    }
+    
+    .rows {
+        margin: 10px;
+        min-width: 80px;
+        min-height: 50px;
+    }
+    
+    .cells {
+        margin: 10px;
+        width: 60px;
+        height: 60px;
+        border: 2px solid black;
+        display: inline-block;
+        z-index: 3;
+        background-position: center;
+        background-size: 100%;
+        background-repeat: no-repeat;
+    }
+    
+    .shadow {
+        background-color: rgb(39, 14, 11);
+    }
+    
+    .shot {
+        visibility: hidden;
+    }
+    
+    header div {
+        display: inline-block;
+        min-width: 32%;
+    }
+    
+    header div:first-child {
+        border-right: 2px solid black;
+    }
+    
+    header div:last-child {
+        border-left: 2px solid black;
+    }
+    
+    button {
+        text-decoration: none;
+        outline: none;
+        display: inline-block;
+        color: black;
+        border-radius: 10px;
+        border: 2px solid black;
+        padding: 8px 20px;
+        background-image: linear-gradient(to right, #9EEFE1 0%, rgb(49, 194, 71) 51%, #9EEFE1 100%);
+        box-shadow: 0 0 20px rgba(0, 0, 0, .1);
+        transition: .5s;
+        box-sizing: border-box;
+    }
+    
+    button:hover {
+        background-image: linear-gradient(to right, rgb(198, 209, 101) 0%, rgb(128, 0, 28) 51%, rgb(198, 209, 101) 100%);
+        color: whitesmoke;
+    }
