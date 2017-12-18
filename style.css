@@ -13,6 +13,7 @@ img {
 header {
     background: rgb(49, 194, 71);
     margin-bottom: 40px;
+    border-bottom: 2px solid black;
 }
 
 .container {
