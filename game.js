@@ -43,7 +43,11 @@ window.onload = function() {
 
         variables: {
             firstOpenImage: null,
-            secondOpenImage: null
+            secondOpenImage: null,
+            times: 1000,
+            totalScore: 0,
+            totalCells: 0,
+            balance: null
         },
 
         field: document.getElementById("fieldForGame"),
@@ -73,7 +77,7 @@ window.onload = function() {
                 app.fieldParams.height = num;
             }
             // if height > width swap them
-            if ((app.fieldParams.width * app.fieldParams.height) % 2 !== 0) {
+            if ((app.variables.totalCells) % 2 !== 0) {
                 app.fieldParams.height++;
             }
         },
@@ -87,10 +91,10 @@ window.onload = function() {
         },
 
         generateBoard: function() {
-            let full = false;
-            let total = app.fieldParams.width * app.fieldParams.height;
 
-            app.generateField(total);
+            app.variables.totalCells = app.fieldParams.width * app.fieldParams.height;
+
+            app.generateField(app.variables.totalCells);
 
             for (let i = 0; i < app.imgArr.length; i++) {
                 let imgURL = app.imgArr[i];
@@ -100,15 +104,17 @@ window.onload = function() {
 
         startPlay: function() {
             start.addEventListener("click", app.setField, false);
-
+        },
+        removeStart: function() {
+            start.removeEventListener("click", app.setField, false);
         },
 
         setField: function() {
             app.setGrid();
-            //console.log(app.matrix);
             app.pushCells();
             app.pushImgs();
             app.addEvents();
+            app.removeStart();
         },
 
         createImg: function() {
@@ -136,10 +142,7 @@ window.onload = function() {
                     let cell = app.createCell(i, j);
                     row.appendChild(cell);
                     app.matrix[i][j] = {
-                        src: app.stack.pop(),
-                        isVisible: true,
-                        isChosen: false,
-                        isDeleted: false
+                        src: app.stack.pop()
                     };
                 }
                 app.field.appendChild(row);
@@ -147,7 +150,7 @@ window.onload = function() {
         },
 
         pushCells: function() {
-            app.cells = document.querySelectorAll("." + app.CLASSES.CELLS);
+            app.cells = app.field.querySelectorAll("." + app.CLASSES.CELLS);
         },
 
         pushImgs: function() {
@@ -158,6 +161,7 @@ window.onload = function() {
 
         addEvents: function() {
             app.field.addEventListener("click", app.checkPicture, false);
+            app.totalCount();
         },
 
         tryShot: function() {
@@ -165,9 +169,13 @@ window.onload = function() {
                 p2 = app.variables.secondOpenImage;
 
             if ((p1 !== null) && (p2 !== null) && (p1.style.backgroundImage == p2.style.backgroundImage)) {
-                let box = document.querySelectorAll("." + app.CLASSES.CHOSEN);
+                let box = app.field.querySelectorAll("." + app.CLASSES.CHOSEN);
                 box[0].classList.add(app.CLASSES.SHOT);
                 box[1].classList.add(app.CLASSES.SHOT);
+                box[0].classList.remove(app.CLASSES.SHADOW);
+                box[1].classList.remove(app.CLASSES.SHADOW);
+                app.scoreCount();
+                app.showRezult();
             }
         },
 
@@ -220,7 +228,6 @@ window.onload = function() {
             e.target.style.backgroundImage = "url(" + app.matrix[e.target.dataset.x][e.target.dataset.y].src + ")";
         },
 
-
         getRandomImgURL: function() {
             return app.imgArr[app.getNumber(app.imgArr.length - 1, 0)]
         },
@@ -232,13 +239,35 @@ window.onload = function() {
         },
 
         hideAllImages: function(e) {
-            let images = document.querySelectorAll("." + app.CLASSES.CHOSEN);
+            let images = app.field.querySelectorAll("." + app.CLASSES.CHOSEN);
 
             app.variables.firstOpenImage = null;
             app.variables.secondOpenImage = null;
             app.handlehidenElement(images[0]);
             app.handlehidenElement(images[1]);
         },
+
+        totalCount: function() {
+            var timer = setInterval(function() {
+                time.innerHTML = app.variables.times--;
+                if (app.variables.times === 0) {
+                    clearInterval(timer)
+                    time.innerHTML = "You loose !";
+                }
+            }, 1000);
+        },
+        scoreCount: function() {
+            app.variables.totalScore += Math.floor(app.variables.times / 100);
+            total.innerHTML = app.variables.totalScore;
+        },
+        showRezult: function() {
+            app.variables.balance = app.field.querySelectorAll("." + app.CLASSES.SHOT);
+            if (app.variables.balance.length >= app.variables.totalCells) {
+                console.log(app.variables.balance.length);
+                app.field.innerHTML = app.variables.balance.length;
+            }
+
+        }
 
     }
     app.makeMaxBord(app.imgArr);
