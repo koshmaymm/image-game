@@ -37,6 +37,8 @@ let app = {
         "https://kde.link/test/9.png", "https://kde.link/test/9.png",
     ],
 
+    newImgArr: [],
+
     matrix: [],
     stack: [],
     cells: "",
@@ -63,8 +65,9 @@ let app = {
     },
 
 
-    makeMaxBord: function(arr) { // get required number of images
-        app.imgArr = arr.concat(arr).concat(arr).concat(arr);
+    makeMaxBord: function() { // get required number of images
+        app.newImgArr = app.imgArr;
+        app.newImgArr = app.newImgArr.concat(app.newImgArr).concat(app.newImgArr).concat(app.newImgArr);
     },
 
     setFieldParams: function() {
@@ -85,33 +88,31 @@ let app = {
     },
     generateField: function(num) {
         //required amount duplicate images
-        app.imgArr = app.imgArr.splice(0, num);
+        app.newImgArr = app.newImgArr.splice(0, num);
         //random sort images
-        app.imgArr = app.imgArr.sort(function(a, b) { return 0.5 - Math.random() });
-        app.imgArr = app.imgArr.sort(function(a, b) { return 0.5 - Math.random() });
-
+        app.newImgArr = app.newImgArr.sort(function(a, b) { return 0.5 - Math.random() });
+        app.newImgArr = app.newImgArr.sort(function(a, b) { return 0.5 - Math.random() });
     },
 
     generateBoard: function() {
-
         let total = app.fieldParams.width * app.fieldParams.height;
-
         app.generateField(total);
-
-        for (let i = 0; i < app.imgArr.length; i++) {
-            let imgURL = app.imgArr[i];
+        for (let i = 0; i < app.newImgArr.length; i++) {
+            let imgURL = app.newImgArr[i];
             app.stack.push(imgURL);
         }
     },
 
     startPlay: function() {
         start.addEventListener("click", app.setField, false);
+        total.innerHTML = "";
     },
     removeStart: function() {
         start.removeEventListener("click", app.setField, false);
     },
 
     setField: function() {
+        app.field.innerHTML = "";
         app.setGrid();
         app.pushCells();
         app.pushImgs();
@@ -231,7 +232,7 @@ let app = {
     },
 
     getRandomImgURL: function() {
-        return app.imgArr[app.getNumber(app.imgArr.length - 1, 0)]
+        return app.newImgArr[app.getNumber(app.newImgArr.length - 1, 0)]
     },
 
     handlehidenElement: function(e) {
@@ -242,7 +243,6 @@ let app = {
 
     hideAllImages: function(e) {
         let images = app.field.querySelectorAll("." + app.CLASSES.CHOSEN);
-
         app.variables.firstOpenImage = null;
         app.variables.secondOpenImage = null;
         app.handlehidenElement(images[0]);
@@ -258,20 +258,38 @@ let app = {
             }
         }, 1000);
     },
+
     scoreCount: function() {
         app.variables.totalScore += Math.floor(app.variables.times / 100);
         total.innerHTML = app.variables.totalScore;
     },
+
+    clearAllParams: function() {
+        app.fieldParams.height = 0;
+        app.fieldParams.width = 0;
+        app.matrix = [];
+        app.stack = [];
+        app.cells = "";
+        app.variables.firstOpenImage = null;
+        app.variables.secondOpenImage = null;
+        app.variables.times = 999;
+        app.variables.totalScore = 0;
+        app.variables.totalCells = 0;
+        app.countTime = null;
+    },
+
     showRezult: function() {
         let balance = app.field.querySelectorAll("." + app.CLASSES.SHOT);
         if (balance.length >= (app.fieldParams.width * app.fieldParams.height)) {
             clearInterval(app.variables.countTime)
             app.field.innerHTML = "<p> You total rezult is </p> " + app.variables.totalScore + "<p>Points</p>";
+            app.clearAllParams();
+            this.init();
         }
-
     },
+
     init: function() {
-        app.makeMaxBord(app.imgArr);
+        app.makeMaxBord();
         app.setFieldParams();
         app.generateBoard();
         app.startPlay();
